@@ -45,6 +45,6 @@ ADM3Aplugin.jar: $(CORE_CLASS) $(AUXS)
 	jar -cMf $@ $^
 
 ship: jar
-	rsync -Wuv ADM3Atelnet.jar ../bin
+	cp ADM3Atelnet.jar ..
 
 __FRC__:
