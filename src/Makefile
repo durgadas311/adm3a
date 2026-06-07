@@ -2,7 +2,8 @@
 # would like to avoid having duplicates of classes
 # in ../sim, but standalone JAR needs them copied.
 # Perhaps 'jdeps' can help with this.
-CLASS_PATH = .
+
+JSERIAL = jserialcomm/jSerialComm-2.9.3.jar
 
 # For the plugin, these must come from the parent
 SIM_CLASS = GenericHelp.class \
@@ -18,17 +19,17 @@ CORE_CLASS = ADM3ACrtScreen.class \
 	Paster.class \
 	Typer.class
 
-JARS = ADM3Atelnet.jar ADM3Aplugin.jar
+JARS = ADM3Atelnet.jar ADM3Atty.jar ADM3Aplugin.jar
 
 AUXS = $(wildcard doc/*) $(wildcard fonts/*.ttf) $(wildcard *.wav)
 
-all: $(CLASSES) $(SIM_CLASS)
+all: $(CORE_CLASS) $(SIM_CLASS)
 
 %.class: %.java
-	javac -cp $(CLASS_PATH) $?
+	javac $?
 
-#ADM3Atty.class: ADM3Atty.java $(JSERIAL)
-#	javac -cp .:$(JSERIAL) $<
+ADM3Atty.class: ADM3Atty.java $(JSERIAL)
+	javac -cp .:$(JSERIAL) $<
 
 jar: $(JARS)
 
@@ -36,15 +37,15 @@ ADM3Atelnet.jar: ADM3Atelnet.class $(CORE_CLASS) $(SIM_CLASS) $(AUXS)
 	echo "Main-Class: ADM3Atelnet" >Manifest.txt
 	jar -cmf Manifest.txt $@ $^
 
-ADM3Atty.jar: $(CLASSES) $(SIM_CLASS) $(AUXS)
+ADM3Atty.jar: ADM3Atty.class $(CORE_CLASS) $(SIM_CLASS) $(AUXS) $(JSERIAL)
 	echo "Main-Class: ADM3Atty" >Manifest.txt
-	jar -cmf Manifest.txt $@ *.class $(AUXS)
+	jar -cmf Manifest.txt $@ $^
 
 # Need to exclude ADM3Atelnet.class...
 ADM3Aplugin.jar: $(CORE_CLASS) $(AUXS)
 	jar -cMf $@ $^
 
 ship: jar
-	cp ADM3Atelnet.jar ..
+	cp $(JARS) ..
 
 __FRC__:
