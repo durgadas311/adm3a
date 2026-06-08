@@ -46,6 +46,15 @@ class Paster implements Runnable {
 		fifo.clear();
 	}
 
+	public void charDelay(int c) {
+		try {
+			if (c == '\r')
+				Thread.sleep(paste_cr_delay);
+			else
+				Thread.sleep(paste_delay);
+		} catch (Exception ee) {}
+	}
+
 	public void run() {
 		String s;
 		while (true) {
@@ -62,13 +71,9 @@ class Paster implements Runnable {
 				synchronized (this) {
 					if (cancel) break;
 				}
-				type.typeChar((int)s.charAt(x));
-				try {
-					if (x == '\r')
-						Thread.sleep(paste_cr_delay);
-					else
-						Thread.sleep(paste_delay);
-				} catch (Exception ee) {}
+				int c = (int)s.charAt(x);
+				type.typeChar(c);
+				charDelay(c);
 			}
 		}
 	}

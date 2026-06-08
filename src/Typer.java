@@ -2,4 +2,6 @@
 
 public interface Typer {
 	void typeChar(int c);
+	void typeCharDelay(int c);
+	int getCarr();
 };

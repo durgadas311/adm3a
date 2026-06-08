@@ -494,6 +494,13 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 		}
 	}
 
+	public void typeCharDelay(int c) {
+		typeChar(c);
+		paster.charDelay(c);
+	}
+
+	public int getCarr() { return 0; } // not used here
+
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() != MouseEvent.BUTTON2) {
 			return;
