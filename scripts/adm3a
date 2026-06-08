@@ -1,0 +1,11 @@
+#!/bin/bash
+# An example of how to run the Virtual ADM3A Terminal on a socket.
+#
+# Usage: adm3a <host> <port>
+#
+# Assumes that https://github.com/durgadas311/adm3a.git was cloned
+# into ${HOME}/git. Adjust paths if you use a different location.
+
+JAR1=${HOME}/git/adm3a/ADM3Atelnet.jar
+
+exec java -jar ${JAR1} "${@}"
