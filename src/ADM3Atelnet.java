@@ -23,18 +23,9 @@ public class ADM3Atelnet implements TermContainer {
 	private static final int OPTION_YES = 1;
 
 	public ADM3Atelnet(String[] args) {
-		// First existing file in args is config file...
+		// Args may be prop=value expressions.
 		// Other args are host and optional port...
-		String rc = System.getenv("ADM3A_CONFIG");
-		if (rc == null) {
-			File f = new File("./adm3arc");
-			if (f.exists()) {
-				rc = f.getAbsolutePath();
-			}
-		}
-		if (rc == null) {
-			rc = System.getProperty("user.home") + "/.adm3arc";
-		}
+		String rc = ADM3A.getConfig(args);
 		Properties props = new Properties();
 		try {
 			FileInputStream cfg = new FileInputStream(rc);

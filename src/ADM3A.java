@@ -53,6 +53,20 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 	boolean even;
 	boolean col72_beep;
 
+	public static String getConfig(String[] args) {
+		String rc = System.getenv("ADM3A_CONFIG");
+		if (rc == null) {
+			File f = new File("./adm3a.rc");
+			if (f.exists()) {
+				rc = f.getAbsolutePath();
+			}
+		}
+		if (rc == null) {
+			rc = System.getProperty("user.home") + "/.adm3arc";
+		}
+		return rc;
+	}
+
 	public ADM3A(Properties props, TermContainer fe) {
 		super(title + " - " + fe.getTitle());
 		this.fe = fe;
