@@ -1,5 +1,7 @@
 // Copyright (c) 2026 Douglas Miller <durgadas311@gmail.com>
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.awt.*;
@@ -27,6 +29,9 @@ public class ADM3Atty implements TermContainer {
 	private static final int OPTION_CANCEL = 0;
 	private static final int OPTION_YES = 1;
 
+	List<String> boolArgs = Arrays.asList();
+	String[] seqArgs = new String[]{ "tty", "baud" };
+
 	public ADM3Atty(String[] args) {
 		// Args may be prop=value expressions.
 		// Other args are tty and optional baud...
@@ -44,18 +49,7 @@ public class ADM3Atty implements TermContainer {
 	
 		String s;
 		// Turn everything into properties...
-		for (String arg : args) {
-			if (arg.indexOf("=") >= 0) {
-				String[] ss = arg.split("=", 2);
-				props.setProperty("adm3a_" + ss[0], ss[1]);
-			} else if (arg.equals("loopback")) {
-				props.setProperty("adm3a_loopback", "true");
-			} else if (tty == null) {
-				tty = arg;
-			} else if (baud <= 0) {
-				baud = Integer.decode(arg);
-			}
-		}
+		ADM3A.processArgs(props, args, boolArgs, seqArgs);
 		s = props.getProperty("adm3a_tty");
 		if (s != null) {
 			tty = s;
@@ -63,13 +57,12 @@ public class ADM3Atty implements TermContainer {
 		s = props.getProperty("adm3a_baud");
 		if (s != null) {
 			baud = Integer.decode(s);
+		} else {
+			baud = 9600;
 		}
 		if (tty == null) {
-			System.err.format("Usage: ADM3Atty [conf] tty [baud]\n");
+			System.err.format("Usage: ADM3Atty tty [baud]\n");
 			System.exit(1);
-		}
-		if (baud <= 0) {
-			baud = 9600;
 		}
 		comm = getPort(tty, baud);
 		if (comm == null) {

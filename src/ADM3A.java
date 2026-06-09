@@ -3,6 +3,7 @@
 // Implements overall ADM3A and Kayboard
 
 import java.util.Properties;
+import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 import java.io.*;
@@ -53,6 +54,8 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 	boolean even;
 	boolean col72_beep;
 
+	static List<String> bools = Arrays.asList("loopback");
+
 	public static String getConfig(String[] args) {
 		String rc = System.getenv("ADM3A_CONFIG");
 		if (rc == null) {
@@ -65,6 +68,21 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 			rc = System.getProperty("user.home") + "/.adm3arc";
 		}
 		return rc;
+	}
+
+	public static void processArgs(Properties props, String[] args,
+					List<String> _bools, String[] seq) {
+		int x = 0;
+		for (String arg : args) {
+			if (arg.indexOf("=") > 0) {
+				String[] ss = arg.split("=", 2);
+				props.setProperty("adm3a_" + ss[0], ss[1]);
+			} else if (bools.contains(arg) || _bools.contains(arg)) {
+				props.setProperty("adm3a_" + arg, "true");
+			} else if (x < seq.length) {
+				props.setProperty("adm3a_" + seq[x++], arg);
+			}
+		}
 	}
 
 	public ADM3A(Properties props, TermContainer fe) {

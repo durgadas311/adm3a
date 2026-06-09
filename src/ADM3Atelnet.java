@@ -1,5 +1,7 @@
 // Copyright (c) 2025 Douglas Miller <durgadas311@gmail.com>
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.awt.*;
@@ -22,6 +24,9 @@ public class ADM3Atelnet implements TermContainer {
 	private static final int OPTION_CANCEL = 0;
 	private static final int OPTION_YES = 1;
 
+	List<String> boolArgs = Arrays.asList();
+	String[] seqArgs = new String[]{ "host", "port" };
+
 	public ADM3Atelnet(String[] args) {
 		// Args may be prop=value expressions.
 		// Other args are host and optional port...
@@ -39,33 +44,20 @@ public class ADM3Atelnet implements TermContainer {
 	
 		String s;
 		// Turn everything into properties...
-		for (String arg : args) {
-			if (arg.indexOf("=") >= 0) {
-				String[] ss = arg.split("=", 2);
-				props.setProperty("adm3a_" + ss[0], ss[1]);
-			} else if (arg.equals("loopback")) {
-				props.setProperty("adm3a_loopback", "true");
-			} else if (host == null) {
-				host = arg;
-			} else if (port <= 0) {
-				port = Integer.decode(arg);
-			}
-		}
-		if (host == null) {
-			s = props.getProperty("adm3a_host");
-			if (s == null) {
-				System.err.format("Usage: ADM3Atelnet [conf] host [port]\n");
-				System.exit(1);
-			}
+		ADM3A.processArgs(props, args, boolArgs, seqArgs);
+		s = props.getProperty("adm3a_host");
+		if (s != null) {
 			host = s;
 		}
-		if (port <= 0) {
-			s = props.getProperty("adm3a_port");
-			if (s != null) {
-				port = Integer.decode(s);
-			} else {
-				port = 23;	// standard telnet port
-			}
+		s = props.getProperty("adm3a_port");
+		if (s != null) {
+			port = Integer.decode(s);
+		} else {
+			port = 23;	// standard telnet port
+		}
+		if (host == null) {
+			System.err.format("Usage: ADM3Atelnet host [port]\n");
+			System.exit(1);
 		}
 		reconnect();
 
