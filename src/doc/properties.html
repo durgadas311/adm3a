@@ -50,7 +50,7 @@ to select the control character glyphs and reverse-video glyphs.
 
 <DT>adm3a_font_size
 <DD>Specifies the font size to use for the display.
-The optimal vallue for the built-in font is "18", the
+The optimal value for the built-in font is "18", the
 default.
 </DD>
 
@@ -79,6 +79,18 @@ It is generally only useful for test purposes.
 No value is require.
 </DD>
 
+<DT>adm3a_log
+<DD>Capture all terminal input to the file specified.
+Add optional "a" to preserve previous contents ("a"ppend).
+</DD>
+
+<DT>adm3a_case
+<DD>Specify color of the "case" (bezel around the CRT).
+6-digit hexadecimal RGD values.
+A single color cause the highlight and shadow color to be computed.
+Three colors specifies color, darker, brighter values respectively.
+</DD>
+
 </DL>
 
 <H3>ADM3A Legacy Option Properties</H3>
@@ -90,7 +102,7 @@ If the property is not set, the default value is used.
 
 <DL>
 <DT>adm3a_auto_nl
-<DD>Enables the atuomatic CR-LF at column 80.
+<DD>Enables the automatic CR-LF at column 80.
 Default is on.
 </DD>
 <DT>adm3a_uc_only

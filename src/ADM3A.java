@@ -44,6 +44,9 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 
 	Beep bell;
 	OutputStream log = null;
+	Color cc; // Case Color
+	Color ccdk; // Case shadow Color
+	Color cclt; // Case highlight Color
 
 	boolean auto_nl;
 	boolean uc_only;
@@ -117,6 +120,18 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 				System.err.format("Failed to setup adm3a_log file %s\n",
 						ss[0]);
 			}
+		}
+		s = props.getProperty("adm3a_case"); // Case Color
+		if (s != null) {
+			setCaseColor(s);
+		} else {
+			cc = getContentPane().getBackground();
+		}
+		if (ccdk == null) {
+			ccdk = cc.darker();
+		}
+		if (cclt == null) {
+			cclt = cc.brighter();
 		}
 		// various terminal options
 		auto_nl = true;
@@ -196,6 +211,31 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 		restart();
 	}
 
+	private void setCaseColor(String s) {
+		if (s.equalsIgnoreCase("beige")) {
+			cc = new Color(0xf0e0d0);
+			ccdk = new Color(0xe0d0b0);
+			cclt = new Color(0xfff0e0);
+			return;
+		} else if (s.equalsIgnoreCase("blue")) {
+			cc = new Color(0xe0e8f0);
+			ccdk = new Color(0xd0d8e0);
+			cclt = new Color(0xf0f8ff);
+			return;
+		} else if (s.equalsIgnoreCase("green")) {
+			cc = new Color(0xd0f0e0);
+			ccdk = new Color(0xc0e0d0);
+			cclt = new Color(0xe0fff0);
+			return;
+		}
+		String[] ss = s.split("[,\\s]");
+		cc = new Color(Integer.valueOf(ss[0], 16));
+		if (ss.length >= 3) {
+			ccdk = new Color(Integer.valueOf(ss[1], 16));
+			cclt = new Color(Integer.valueOf(ss[2], 16));
+		}
+	}
+
 	private JPanel setupScreen() {
 		int gaps;
 		float rounding;
@@ -203,7 +243,7 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 		int offset;
 
 		JPanel pnl = new JPanel();
-		pnl.setBackground(getContentPane().getBackground());
+		pnl.setBackground(cc);
 		pnl.setOpaque(true);
 		Dimension dim = crt.getPreferredSize();
 		gaps = dim.width / 50;
@@ -243,9 +283,7 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 		pnl.add(pan);
 
 		BezelRoundedRectangle tube = new BezelRoundedRectangle(crt.getBackground(),
-			getContentPane().getBackground(), true,
-			0f, 0f, width, height,
-			rounding, rounding);
+			cc, ccdk, cclt, true, 0f, 0f, width, height, rounding, rounding);
 		GridBagLayout gb = new GridBagLayout();
 		tube.setLayout(gb);
 		tube.setOpaque(false);

@@ -17,17 +17,18 @@ class BezelRoundedRectangle extends JPanel {
 	Polygon lpoly;
 	int _ox, _oy, _ex, _ey;
 
-	public BezelRoundedRectangle(Color bg, Color bez, boolean reverse,
+	public BezelRoundedRectangle(Color bg, Color bez, Color bezdk, Color bezlt,
+			boolean reverse,
 			float x, float y, float w, float h,
 			float arcw, float arch) {
 		color = bg;
 		bezel = bez;
 		if (reverse) {
-			highlt = bez.darker();
-			shadow = bez.brighter();
+			highlt = bezdk;
+			shadow = bezlt;
 		} else {
-			shadow = bez.darker();
-			highlt = bez.brighter();
+			shadow = bezdk;
+			highlt = bezlt;
 		}
 		_arch = Math.round(arch / 2);
 		_arcw = Math.round(arcw);
