@@ -124,8 +124,9 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 		s = props.getProperty("adm3a_case"); // Case Color
 		if (s != null) {
 			setCaseColor(s);
-		} else {
-			cc = getContentPane().getBackground();
+		}
+		if (cc == null) {
+			setCaseColor("beige");
 		}
 		if (ccdk == null) {
 			ccdk = cc.darker();
@@ -226,6 +227,9 @@ public class ADM3A extends JFrame implements Typer, KeyListener, MouseListener,
 			cc = new Color(0xd0f0e0);
 			ccdk = new Color(0xc0e0d0);
 			cclt = new Color(0xe0fff0);
+			return;
+		} else if (s.equalsIgnoreCase("gray")) {
+			cc = getContentPane().getBackground();
 			return;
 		}
 		String[] ss = s.split("[,\\s]");
